@@ -18,14 +18,17 @@ public class Vector2D {
 	public double getY() {
 		return y;
 	}
-	public Vector2D sum(Vector2D a, Vector2D b) {
-		return new Vector2D(a.x + b.x, a.y + b.y);
+	public Vector2D sum(Vector2D b) {
+		return new Vector2D(this.x + b.x, this.y + b.y);
 	}
-	public Vector2D diff(Vector2D a, Vector2D b) {
-		return new Vector2D(a.x - b.x, a.y - b.y);
+	public Vector2D diff(Vector2D b) {
+		return new Vector2D(this.x - b.x, this.y - b.y);
 	}
-	public double dist(Vector2D a, Vector2D b) {
-		return new Vector2D(a.x - b.x, a.y - b.y).norm();
+	public double dist(Vector2D b) {
+		return new Vector2D(this.x - b.x, this.y - b.y).norm();
+	}
+	public Vector2D multiply(double a) {
+		return new Vector2D(this.x*a, this.y*a);
 	}
 
 }
