@@ -11,5 +11,5 @@ public interface Vec {
 	
 	public Vector2D diff(Vector2D b);
 	public double dist(Vector2D b);
-
+	public void sumWith(Vec other);
 }
