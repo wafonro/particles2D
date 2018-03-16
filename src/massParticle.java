@@ -9,10 +9,10 @@ public class massParticle {
 		double dist = a.position.dist(b.position);
 		return b.position.diff(a.position).multiply(a.mass*b.mass/(dist*dist*dist));
 	}
-	void updatePosition() {
-		position = position.sum(velocity);
+	void updatePosition(double delta) {
+		position = position.sum(velocity.multiply(delta));
 	}
-	void updateVelocity() {
-		velocity = velocity.sum(acceleration);
+	void updateVelocity(double delta) {
+		velocity = velocity.sum(acceleration.multiply(delta));
 	}
 }
