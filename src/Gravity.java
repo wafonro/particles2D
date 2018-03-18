@@ -1,9 +1,31 @@
+import java.util.Vector;
 
-public class Gravity {
-	static calc_a(Particle me, Vector<Particle> others) {
-		double f = 0, m = me.mass(), x = me.x(), y = me.y();
-		for(Particle other: others) {
-			f += m*others.mass
+public class Gravity implements Force {
+	public Vector2D calc_a(Particle me, Vector<Particle> system) {
+		Vector2D force = Vector2D.ZERO, pos = me.position(), relPos;
+		double m = me.mass(), r;
+		
+		for(Particle other: system) {
+			//no force between the same particle
+			if(me.id != other.id) {
+				relPos = Vector2D.diff(other.position_(), pos);
+				r = relPos.norm();
+				force.sumWith(Vector2D.multiply(relPos, (m*other.mass())/(r*r*r)));
+			}
 		}
+		return Vector2D.divide(force,m);
+	}
+	
+	public double calc_energy(Vector<Particle> system) {
+		Particle p1, p2;
+		double energy = 0;
+		for(int i = 0; i < system.size(); i++) {
+			p1 = system.get(i);
+			for(int j = i+1; j < system.size(); j++) {
+				p2 = system.get(j);
+				energy += (p1.mass()*p2.mass())/(Vector2D.diff(p1.position_(), p2.position_()).norm());
+			}
+		}
+		return -energy;
 	}
 }
