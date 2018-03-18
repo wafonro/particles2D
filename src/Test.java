@@ -1,6 +1,6 @@
 import java.util.Random;
 import java.util.Vector;
-
+// This class tests the Particle and DynSystem classes, with the help as well of the Gravity class implemented through the Force interface
 public class Test {
 	public static void testParticleConstructorRandom(double max_mass, double max_position, double max_velocity) {
 		System.out.println("\nTesting Constructor");

@@ -2,11 +2,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-
+//This is a thread that picks a group of particles and evolves them through time, it is synchronized with
+//other threads such as to always have alll particles of the system at the same moment in time
 public class Progresser extends Thread {
 	DynSystem systemState;
-	int begin, end;
-	ConcurrentLinkedQueue<DynSystem> outputBuffer;
+	int begin, end;//this determines the fraction of the whole dynamic system that this thread will progress
+	ConcurrentLinkedQueue<DynSystem> outputBuffer;//this is the channel where the thread sends the states to be displayed at each time
 	
 	final Lock lock;
 	final Condition endAcc, endPos;

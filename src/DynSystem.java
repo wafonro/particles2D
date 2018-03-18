@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class DynSystem {
 	Vector<Particle> sysParticles;
-	public final AtomicInteger counterUpdates;//this counts how many acceleration updates we made
+	public final AtomicInteger counterUpdates;//this counts how many acceleration updates we made, for sync purposes
 	public final Force f =  new Gravity();
 	public final double delta_t;
 	
