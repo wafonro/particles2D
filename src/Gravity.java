@@ -2,15 +2,14 @@ import java.util.Vector;
 
 public class Gravity implements Force {
 	public Vector2D calc_a(Particle me, Vector<Particle> system) {
-		Vector2D force = Vector2D.ZERO, pos = me.position(), relPos;
+		Vector2D force = new Vector2D(), pos = me.position(), relPos;
 		double m = me.mass(), r;
 		
 		for(Particle other: system) {
-			//no force between the same particle
-			if(me.id != other.id) {
-				relPos = Vector2D.diff(other.position_(), pos);
+				if(me.id != other.id) {
+				relPos = Vector2D.diff(other.position_(),pos);
 				r = relPos.norm();
-				force.sumWith(Vector2D.multiply(relPos, (m*other.mass())/(r*r*r)));
+				force.sumWith(Vector2D.multiply(relPos, ((double)m*other.mass())/(r*r*r)));
 			}
 		}
 		return Vector2D.divide(force,m);

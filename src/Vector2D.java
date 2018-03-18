@@ -2,16 +2,18 @@ import java.util.Random;
 
 public class Vector2D{
 	private double x,y;
-	final static public Vector2D ZERO = new Vector2D(0,0);
+	Vector2D(){
+		this(0,0);
+	}
 	Vector2D(double x, double y){
 		this.x = x;
 		this.y = y;
 	}
 	public Vector2D(Random r, double max_value){
-		double radius = Math.sqrt(max_value*max_value*r.nextDouble()), angle = 2*Math.PI*r.nextDouble();
+		double radius = max_value*r.nextDouble(), angle = 2*Math.PI*r.nextDouble();
 		
-		this.x = Math.sqrt(radius)*Math.cos(angle);
-		this.y = Math.sqrt(radius)*Math.sin(angle);
+		this.x = radius*Math.cos(angle);
+		this.y = radius*Math.sin(angle);
 	}
 	
 	public Vector2D(Random r, double max_x, double max_y){

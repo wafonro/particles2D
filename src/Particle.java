@@ -8,7 +8,7 @@ public class Particle {
 	public Particle(double mass, Vector2D position, Vector2D velocity, int id) {
 		this.mass = mass;
 		this.velocity = velocity;
-		this.acceleration = Vector2D.ZERO;//adapt this to generalize
+		this.acceleration = new Vector2D();//adapt this to generalize
 		this.position = position;
 		this.id = id;
 	}
@@ -18,7 +18,7 @@ public class Particle {
 	}
 	
 	public Particle(Random r, double min_mass, double max_mass, double max_position, double max_velocity, int id) {
-		this(min_mass + (max_mass-min_mass) * r.nextDouble(), new Vector2D(r,max_position), new Vector2D(r, max_velocity), id);
+		this(min_mass + (max_mass-min_mass) * r.nextDouble(), Vector2D.sum(new Vector2D(400,400),new Vector2D(r,max_position)), new Vector2D(r, max_velocity), id);
 	}
 	
 	public void updatePosition(double delta) {
