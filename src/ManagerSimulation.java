@@ -24,20 +24,26 @@ public class ManagerSimulation implements Runnable{
 		Vector<Particle> particles = new Vector<Particle>();
 		for(int i = 0; i < n_of_particles; i++){
 			particles.add(new Particle(randomGenerator,min_mass, max_mass,max_position,max_velocity,i));
-
 		}
+		DynSystem system = new DynSystem(particles,delta);
 
 		int n_particles_per_thread = n_of_particles / n_of_threads;
 
 		while(true){
+			Thread[] progresserThreads = new Thread[n_of_threads];
 			Thread[] updateAccelerationThreads = new Thread[n_of_threads];
 			Thread[] updatePositionAndSpeedThreads = new Thread[n_of_threads];
 			for(int k = 0; k < n_of_threads-1; k++){
-				updateAccelerationThreads[k] = new Thread(new AccelerationUpdater(k*n_particles_per_thread,(k+1)*n_particles_per_thread,particles,f));
-				updatePositionAndSpeedThreads[k] = new Thread(new PositionAndSpeedUpdater(k*n_particles_per_thread,(k+1)*n_particles_per_thread,particles,delta));
+				progresserThreads[k] = new Thread(new Progresser(system,k*n_particles_per_thread,(k+1)*n_particles_per_thread,particles));
+				//updateAccelerationThreads[k] = new Thread(new AccelerationUpdater(k*n_particles_per_thread,(k+1)*n_particles_per_thread,particles,f));
+				//updatePositionAndSpeedThreads[k] = new Thread(new PositionAndSpeedUpdater(k*n_particles_per_thread,(k+1)*n_particles_per_thread,particles,delta));
 				
 			}
-			updateAccelerationThreads[n_of_threads-1] = new Thread(new AccelerationUpdater((n_of_threads-1)*n_particles_per_thread,n_of_particles,particles,f));
+			progresserThreads[n_of_threads-1] = new Thread(new Progresser(system,(n_of_threads-1)*n_particles_per_thread,n_of_particles,particles));
+			for(int j = 0; j < n_of_threads; j++){
+				progresserThreads[j].start();
+			}
+			/*updateAccelerationThreads[n_of_threads-1] = new Thread(new AccelerationUpdater((n_of_threads-1)*n_particles_per_thread,n_of_particles,particles,f));
 			updatePositionAndSpeedThreads[n_of_threads-1] = new Thread(new PositionAndSpeedUpdater((n_of_threads-1)*n_particles_per_thread,n_of_particles,particles,delta));
 			// update acceleration
 			for(int j = 0; j < n_of_threads; j++){
@@ -63,12 +69,7 @@ public class ManagerSimulation implements Runnable{
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-			}
+			}*/
 		}
-		
-		
-		
 	}
-	
-
 }

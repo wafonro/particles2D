@@ -14,7 +14,7 @@ public class ManagerUI implements Runnable {
 
 	public void run() {
 		ConcurrentLinkedQueue<Vector<Particle> > bufferOfParticles = new ConcurrentLinkedQueue<Vector<Particle> >();
-    	Thread updateParticles =  new Thread(new ManagerSimulation(bufferOfParticles, n_of_particles));
+		Thread updateParticles =  new Thread(new ManagerSimulation(bufferOfParticles, n_of_particles));
     	Thread updateCircle = new Thread(new Runnable(){
 				@Override
 				public void run() {
@@ -26,7 +26,7 @@ public class ManagerUI implements Runnable {
 							
 						}
 						if(!bufferOfParticles.isEmpty()){
-							particles = bufferOfParticles.removeLast();
+							particles = bufferOfParticles.remove();
 							for(int i = 0; i < n_of_particles; i++) {
 								circles[i].setCenterX(particles.get(i).x());
 								circles[i].setCenterY(particles.get(i).y());
