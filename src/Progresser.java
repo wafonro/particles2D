@@ -1,3 +1,4 @@
+import java.util.Vector;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -8,12 +9,12 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Progresser extends Thread {
 	DynSystem systemState;
 	int begin, end;//this determines the fraction of the whole dynamic system that this thread will progress
-	ConcurrentLinkedQueue<DynSystem> outputBuffer;//this is the channel where the thread sends the states to be displayed at each time
+	ConcurrentLinkedQueue<Vector<Particle>> outputBuffer;//this is the channel where the thread sends the states to be displayed at each time
 	
 	final Lock lock;
 	final Condition endAcc, endPos;
 	
-	Progresser(DynSystem sys, int begin, int end, ConcurrentLinkedQueue<DynSystem> output){
+	Progresser(DynSystem sys, int begin, int end, ConcurrentLinkedQueue<Vector<Particle> > output){
 		this.systemState = sys;
 		this.begin = begin;
 		this.end = end;
@@ -21,7 +22,7 @@ public class Progresser extends Thread {
 		endAcc = lock.newCondition();
 		endPos = lock.newCondition();
 		outputBuffer = output;
-		outputBuffer.add(sys);
+		outputBuffer.add(sys.sysParticles);
 	}
 	
 	public void run() {
@@ -30,7 +31,7 @@ public class Progresser extends Thread {
 			for(int i = begin; i < end; i++) {
 				finPos = this.systemState.updateVelPos(i);
 				if(finPos) {
-					outputBuffer.add(systemState);	// Here is where we send our newly calculated
+					outputBuffer.add(systemState.sysParticles);	// Here is where we send our newly calculated
 					endPos.signalAll();
 				}	
 			}
