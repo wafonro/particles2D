@@ -22,10 +22,18 @@ public class Particle {
 	}
 	
 	public void updatePosition(double delta) {
+		if(Vector2D.diff(this.position,new Vector2D(400,400)).norm() >1000)
+		{
+			this.velocity = new Vector2D();
+		}
 		this.position.sumWith(Vector2D.multiply(this.velocity, delta));
 	}
 	
 	public void updateVelocity(double delta) {
+		if(this.velocity.norm() > 20000)
+		{
+			this.velocity = new Vector2D();
+		}
 		this.velocity.sumWith(Vector2D.multiply(this.acceleration, delta));
 	}
 	

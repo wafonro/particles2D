@@ -1,11 +1,11 @@
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.Vector;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class ManagerSimulation implements Runnable{
-	LinkedList<Vector<Particle> > bufferParticles;
+	ConcurrentLinkedQueue<Vector<Particle> > bufferParticles;
 	int n_of_particles;
-	ManagerSimulation(LinkedList<Vector<Particle> > buffer, int n_of_particles){
+	ManagerSimulation(ConcurrentLinkedQueue<Vector<Particle> > buffer, int n_of_particles){
 		bufferParticles = buffer;
 		this.n_of_particles = n_of_particles;
 	}
@@ -15,9 +15,9 @@ public class ManagerSimulation implements Runnable{
 		int n_of_steps = 10000;
 		Force f = new Gravity();
 		double min_mass = 1;
-		double max_mass = 100;
-		double max_velocity = 10;//radial
-		double max_position = 400;//radial
+		double max_mass = 1000;
+		double max_velocity = 1;//radial
+		double max_position = 300;//radial
 		double t_final = 100;
 		double delta = 0.01;
 		Random randomGenerator = new Random();

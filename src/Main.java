@@ -15,7 +15,7 @@ public class Main extends Application {
 
 	}
     public void start(Stage stage) {
-    	int n_of_particles = 20;
+    	int n_of_particles = 40;
 	    // canvas where particles will be drawn
 		Pane canvas = new Pane();   
 	    Circle[] circles = new Circle[n_of_particles];
