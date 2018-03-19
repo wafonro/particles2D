@@ -11,42 +11,41 @@ public class Progresser extends Thread {
 	int begin, end;//this determines the fraction of the whole dynamic system that this thread will progress
 	ConcurrentLinkedQueue<Vector<Particle>> outputBuffer;//this is the channel where the thread sends the states to be displayed at each time
 	
-	final Lock lock;
-	final Condition endAcc, endPos;
+	
 	
 	Progresser(DynSystem sys, int begin, int end, ConcurrentLinkedQueue<Vector<Particle> > output){
 		this.systemState = sys;
 		this.begin = begin;
 		this.end = end;
-		lock = new ReentrantLock();
-		endAcc = lock.newCondition();
-		endPos = lock.newCondition();
 		outputBuffer = output;
-		outputBuffer.add(sys.sysParticles);
+		if(begin == 0) {
+			outputBuffer.add(sys.sysParticles);
+		}
 	}
 	
 	public void run() {
-		boolean finAcc = false, finPos = false;
+		boolean finAcc, finPos;
 		while(true) {
+			finPos = false;
 			for(int i = begin; i < end; i++) {
 				finPos = this.systemState.updateVelPos(i);
 				if(finPos) {
 					outputBuffer.add(systemState.sysParticles);	// Here is where we send our newly calculated
-					endPos.signalAll();
+					systemState.endPos.signalAll();
 				}	
 			}
 			if(!finPos)
-				endPos.awaitUninterruptibly();//waiting all of the particles update their acceleration
+				systemState.endPos.awaitUninterruptibly();//waiting all of the particles update their acceleration
 			
-			
+			finAcc = false;
 			//updating acceleration
 			for(int i = begin; i < end; i++) {
 				finAcc = this.systemState.updateAcceleration(i);
 				if(finAcc)
-					endAcc.signalAll();
+					systemState.endAcc.signalAll();
 			}
 			if(!finAcc)
-				endAcc.awaitUninterruptibly();//waiting all of the particles update their acceleration
+				systemState.endAcc.awaitUninterruptibly();//waiting all of the particles update their acceleration
 		}
 	}
 }
