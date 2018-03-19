@@ -1,6 +1,6 @@
 import java.util.LinkedList;
 import java.util.Vector;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import javafx.scene.shape.Circle;
 
@@ -13,7 +13,7 @@ public class ManagerUI implements Runnable {
 	}
 
 	public void run() {
-		ConcurrentLinkedQueue<Vector<Particle> > bufferOfParticles = new ConcurrentLinkedQueue<Vector<Particle> >();
+		LinkedBlockingQueue<Vector<Particle> > bufferOfParticles = new LinkedBlockingQueue<Vector<Particle> >();
 		Thread updateParticles =  new Thread(new ManagerSimulation(bufferOfParticles, n_of_particles));
     	Thread updateCircle = new Thread(new Runnable(){
 				@Override
@@ -26,12 +26,17 @@ public class ManagerUI implements Runnable {
 							
 						}
 						if(!bufferOfParticles.isEmpty()){
-							particles = bufferOfParticles.remove();
-							for(int i = 0; i < n_of_particles; i++) {
-								circles[i].setCenterX(particles.get(i).x());
-								circles[i].setCenterY(particles.get(i).y());
-								circles[i].setRadius(Math.floor(Math.sqrt(particles.get(i).mass())/5));
-							}								
+							try {
+								particles = bufferOfParticles.take();
+								for(int i = 0; i < n_of_particles; i++) {
+									circles[i].setCenterX(particles.get(i).x());
+									circles[i].setCenterY(particles.get(i).y());
+									circles[i].setRadius(Math.floor(Math.sqrt(particles.get(i).mass())/5));
+								}								
+							} catch (InterruptedException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
 						}
 						
 										
