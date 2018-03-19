@@ -13,14 +13,14 @@ public class Progresser extends Thread {
 	final Lock lock;
 	final Condition endAcc, endPos;
 	
-	Progresser(DynSystem sys, int begin, int end){
+	Progresser(DynSystem sys, int begin, int end, ConcurrentLinkedQueue<DynSystem> output){
 		this.systemState = sys;
 		this.begin = begin;
 		this.end = end;
 		lock = new ReentrantLock();
 		endAcc = lock.newCondition();
 		endPos = lock.newCondition();
-		outputBuffer = new ConcurrentLinkedQueue<DynSystem>();
+		outputBuffer = output;
 		outputBuffer.add(sys);
 	}
 	
