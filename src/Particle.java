@@ -28,7 +28,9 @@ public class Particle {
 		}
 		this.position.sumWith(Vector2D.multiply(this.velocity, delta));
 	}
-	
+	public void setVelocity(Vector2D vel){
+		this.velocity = vel;
+	}
 	public void updateVelocity(double delta) {
 		if(this.velocity.norm() > 20000)
 		{

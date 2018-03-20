@@ -15,7 +15,7 @@ public class Main extends Application {
 
 	}
     public void start(Stage stage) {
-    	int n_of_particles = 400;
+    	int n_of_particles = 1;
     	int sizeX = 800, sizeY = 800;
 	    // canvas where particles will be drawn
 		Pane canvas = new Pane();   
@@ -25,8 +25,10 @@ public class Main extends Application {
             canvas.getChildren().add(circles[i]);
     	}
 	    Thread manager = new Thread(new ManagerUI(circles,n_of_particles,sizeX,sizeY));
+	    // forces thread to stop when window closes
+	    manager.setDaemon(true);
     	manager.start();
-    	Scene scene = new Scene(canvas, 800, 800);
+    	Scene scene = new Scene(canvas, sizeX, sizeY);
         stage.setTitle("Circle");
         stage.setScene(scene);
         stage.show();

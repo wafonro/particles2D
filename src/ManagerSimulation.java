@@ -11,12 +11,12 @@ public class ManagerSimulation implements Runnable{
 	}
 	@Override
 	public void run() {
-		int n_of_threads = 10;
+		int n_of_threads = 1;
 		int n_of_steps = 1000000;
 		Force f = new Gravity();
 		double min_mass = 1;
 		double max_mass = 1000;
-		double max_velocity = 1;//radial
+		double max_velocity = 0.1;//radial
 		double max_position = 300;//radial
 		double t_final = 1000;
 		double delta = 0.001;

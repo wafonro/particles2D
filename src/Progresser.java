@@ -37,6 +37,8 @@ public class Progresser extends Thread {
 			}
 			
 			finAcc = systemState.updateAcceleration(begin, end);
+			//systemState.updateCollision(begin,end);
+			systemState.updateBounds(begin, end);
 
 		}
 	}

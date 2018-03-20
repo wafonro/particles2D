@@ -32,6 +32,7 @@ public class Vector2D{
 	public double norm() {
 		return Math.sqrt(norm2());
 	}
+
 	public double getX() {
 		return x;
 	}
@@ -40,6 +41,9 @@ public class Vector2D{
 	}
 	public static Vector2D sum(Vector2D a, Vector2D b) {
 		return new Vector2D(a.x + b.x, a.y + b.y);
+	}
+	public static double dot(Vector2D a, Vector2D b){
+		return a.x * b.x + a.y * b.y;
 	}
 	public void sumWith(Vector2D other) {
 		this.x += other.x();

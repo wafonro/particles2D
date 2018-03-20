@@ -81,6 +81,18 @@ public class DynSystem {
 			lock.unlock();
 		}
 	}
+	public void updateCollision(int begin,int end){
+		for(int i = begin; i < end; i++){
+			for(int j = i; j < sysParticles.size(); j++){
+				Collider.collide(sysParticles.get(i), sysParticles.get(j));
+			}
+		}
+	}
+	public void  updateBounds(int begin, int end){
+		for(int i = begin; i < end; i++){
+			Collider.outerBoxCollision(sysParticles.get(i));
+		}
+	}
 	
 	public int n_of_particles() {
 		return sysParticles.size();

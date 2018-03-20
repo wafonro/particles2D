@@ -9,7 +9,7 @@ public class Gravity implements Force {
 				if(me.id != other.id) {
 				relPos = Vector2D.diff(other.position_(),pos);
 				r = relPos.norm();
-				if(r > 10){
+				if(r > 0.5){
 					force.sumWith(Vector2D.multiply(relPos, ((double)m*other.mass())/(r*r*r)));					
 				}
 			}
