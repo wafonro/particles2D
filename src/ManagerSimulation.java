@@ -11,7 +11,7 @@ public class ManagerSimulation implements Runnable{
 	}
 	@Override
 	public void run() {
-		int n_of_threads = 4;
+		int n_of_threads = 10;
 		int n_of_steps = 1000000;
 		Force f = new Gravity();
 		double min_mass = 1;
@@ -19,7 +19,7 @@ public class ManagerSimulation implements Runnable{
 		double max_velocity = 1;//radial
 		double max_position = 300;//radial
 		double t_final = 1000;
-		double delta = 0.01;
+		double delta = 0.001;
 		Random randomGenerator = new Random();
 		Vector<Particle> particles = new Vector<Particle>();
 		for(int i = 0; i < n_of_particles; i++){
