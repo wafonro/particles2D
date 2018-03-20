@@ -7,7 +7,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class DynSystem {
 	Vector<Particle> sysParticles;
-	public final AtomicInteger counterUpdates;//this counts how many acceleration updates we made, for sync purposes
+	volatile public AtomicInteger counterUpdates;//this counts how many acceleration updates we made, for sync purposes
 	public final Force f =  new Gravity();
 	public final double delta_t;
 	public final Lock lock;
@@ -34,17 +34,19 @@ public class DynSystem {
 	
 	public boolean updateAcceleration(int pos) {
 		sysParticles.get(pos).updateAcceleration(sysParticles, f);
-		System.out.println(this.counterUpdates.get());
 		return counterUpdates.decrementAndGet() == 0;
 	}
 	
 	public boolean updateAcceleration(int begin, int end) {
 		boolean finAcc = false;
-		for(int i = begin; i < end; i++) {
+		for(int i = begin; i < end-1; i++) {
 			finAcc = this.updateAcceleration(i);
-		}
+		}		
+
+
 		lock.lock();
 		try{
+			finAcc = this.updateAcceleration(end-1);
 			if(!finAcc)
 				this.endAcc.awaitUninterruptibly();//waiting all of the particles update their acceleration
 			else this.endAcc.signalAll();
@@ -57,18 +59,20 @@ public class DynSystem {
 	public boolean updateVelPos(int pos) {
 		sysParticles.get(pos).updateVelocity(this.delta_t);
 		sysParticles.get(pos).updatePosition(this.delta_t);
-		System.out.println(this.counterUpdates.get());
+		
 		return counterUpdates.incrementAndGet() == this.sysParticles.size();
 	}
 	
 	public boolean updateVelPos(int begin, int end) {
 		boolean finPos = false;
-		for(int i = begin; i < end; i++) {
+		for(int i = begin; i < end-1; i++) {
 			finPos = this.updateVelPos(i);
 		}
+
 		
 		lock.lock();
 		try{
+			finPos = this.updateVelPos(end-1);
 			if(!finPos)
 				this.endPos.awaitUninterruptibly();//waiting all of the particles update their acceleration
 			else this.endPos.signalAll();

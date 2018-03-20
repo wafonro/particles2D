@@ -29,6 +29,7 @@ public class Progresser extends Thread {
 				try {
 					outputBuffer.put(systemState.sysParticles);//this is ok just because we lock it in the acceleration part
 					finPos = false;
+
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -36,7 +37,7 @@ public class Progresser extends Thread {
 			}
 			
 			finAcc = systemState.updateAcceleration(begin, end);
-			
+
 		}
 	}
 }
