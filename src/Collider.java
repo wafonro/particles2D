@@ -1,6 +1,6 @@
 
 public class Collider {
-	final static double threshold = 1;
+	final static double threshold = 2;
 	final static double boxXmin = 0, boxXmax = 800,boxYmin = 0, boxYmax = 800;
 	public static boolean collide(Particle a, Particle b){
 		Vector2D aPos = a.position(),

@@ -83,7 +83,7 @@ public class DynSystem {
 	}
 	public void updateCollision(int begin,int end){
 		for(int i = begin; i < end; i++){
-			for(int j = i; j < sysParticles.size(); j++){
+			for(int j = i+1; j < sysParticles.size(); j++){
 				Collider.collide(sysParticles.get(i), sysParticles.get(j));
 			}
 		}
