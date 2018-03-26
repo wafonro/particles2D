@@ -12,13 +12,10 @@ public class Particle {
 		this.position = position;
 		this.id = id;
 	}
+
 	
 	public Particle(Random r, double max_mass, double max_position, double max_velocity, int id) {
-		this(max_mass * r.nextDouble(), new Vector2D(r,max_position), new Vector2D(r, max_velocity), id);
-	}
-	
-	public Particle(Random r, double min_mass, double max_mass, double max_position, double max_velocity, int id) {
-		this(min_mass + (max_mass-min_mass) * r.nextDouble(), Vector2D.sum(new Vector2D(400,400),new Vector2D(r,max_position)), new Vector2D(r, max_velocity), id);
+		this(max_mass * r.nextDouble(), Vector2D.sum(new Vector2D(400,400),new Vector2D(r,max_position)), new Vector2D(r, max_velocity), id);
 	}
 	
 	public void updatePosition(double delta) {

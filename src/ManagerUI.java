@@ -6,24 +6,27 @@ import javafx.scene.shape.Circle;
 
 public class ManagerUI implements Runnable {
 	int n_of_particles;
+	double max_mass,max_velocity;
 	int sizeX, sizeY;
 	Circle[] circles;
-	ManagerUI(Circle[] circles, int n_of_particles, int sizeX, int sizeY){
+	ManagerUI(Circle[] circles, int n_of_particles,double max_mass, double max_velocity, int sizeX, int sizeY){
 		this.circles = circles;
 		this.n_of_particles = n_of_particles;
+		this.max_mass = max_mass;
+		this.max_velocity = max_velocity;
 		this.sizeX = sizeX;
 		this.sizeY = sizeY;
 	}
 
 	public void run() {
 		LinkedBlockingQueue<Vector<Particle> > bufferOfParticles = new LinkedBlockingQueue<Vector<Particle> >();
-		Thread updateParticles =  new Thread(new ManagerSimulation(bufferOfParticles, n_of_particles));
+		Thread updateParticles =  new Thread(new ManagerSimulation(bufferOfParticles, n_of_particles, max_mass, max_velocity));
     	Thread updateCircle = new Thread(new Runnable(){
 				@Override
 				public void run() {
 					while(true) {			
 						try {
-							Thread.sleep(1000/60);
+							Thread.sleep(1000/30);
 						} catch (InterruptedException e) {
 							
 						}
