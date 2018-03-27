@@ -8,13 +8,15 @@ public class Progresser extends Thread {
 	DynSystem systemState;
 	int begin, end;//this determines the fraction of the whole dynamic system that this thread will progress
 	private final LinkedBlockingQueue<Vector<Particle>> outputBuffer;//this is the channel where the thread sends the states to be displayed at each time
+	boolean withBorder;
 	
 	
 	
-	Progresser(DynSystem sys, int begin, int end, LinkedBlockingQueue<Vector<Particle> > output) throws InterruptedException{
+	Progresser(DynSystem sys, int begin, int end, LinkedBlockingQueue<Vector<Particle> > output, boolean withBorder) throws InterruptedException{
 		this.systemState = sys;
 		this.begin = begin;
 		this.end = end;
+		this.withBorder = withBorder;
 		outputBuffer = output;
 		if(begin == 0) {
 			outputBuffer.put(sys.sysParticles);
@@ -22,8 +24,10 @@ public class Progresser extends Thread {
 	}
 	
 	public void run() {
-		boolean finAcc = false, finPos = false;
+		boolean  finPos = false;
 		while(true) {
+			
+			// update velocity
 			finPos = systemState.updateVelPos(begin, end);
 			if(finPos){
 				try {
@@ -36,9 +40,13 @@ public class Progresser extends Thread {
 				}
 			}
 			
-			finAcc = systemState.updateAcceleration(begin, end);
-			//systemState.updateCollision(begin,end);
-			systemState.updateBounds(begin, end);
+			// update acceleration
+			systemState.updateAcceleration(begin, end);
+			
+			// if collides with outer bound
+			if(withBorder){
+				systemState.updateBounds(begin, end);
+			}
 
 		}
 	}

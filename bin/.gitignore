@@ -1,3 +1,13 @@
 /Collider.class
-/NumberTextField.class
+/DynSystem.class
+/Force.class
+/Gravity.class
+/Main.class
+/ManagerSimulation.class
 /ManagerUI$1.class
+/ManagerUI.class
+/NumberTextField.class
+/Particle.class
+/PositionAndSpeedUpdater.class
+/Progresser.class
+/Vector2D.class

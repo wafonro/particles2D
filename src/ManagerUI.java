@@ -9,7 +9,9 @@ public class ManagerUI implements Runnable {
 	double max_mass,max_velocity;
 	int sizeX, sizeY;
 	Circle[] circles;
-	ManagerUI(Circle[] circles, int n_of_particles,double max_mass, double max_velocity, int sizeX, int sizeY){
+	LinkedBlockingQueue<Vector<Particle> > bufferOfParticles;
+	ManagerUI(LinkedBlockingQueue<Vector<Particle> > bufferOfParticles, Circle[] circles, int n_of_particles,double max_mass, double max_velocity, int sizeX, int sizeY){
+		this.bufferOfParticles = bufferOfParticles;
 		this.circles = circles;
 		this.n_of_particles = n_of_particles;
 		this.max_mass = max_mass;
@@ -19,50 +21,42 @@ public class ManagerUI implements Runnable {
 	}
 
 	public void run() {
-		LinkedBlockingQueue<Vector<Particle> > bufferOfParticles = new LinkedBlockingQueue<Vector<Particle> >();
-		Thread updateParticles =  new Thread(new ManagerSimulation(bufferOfParticles, n_of_particles, max_mass, max_velocity));
-    	Thread updateCircle = new Thread(new Runnable(){
-				@Override
-				public void run() {
-					while(true) {			
-						try {
-							Thread.sleep(1000/30);
-						} catch (InterruptedException e) {
-							
-						}
-						Platform.runLater(() -> {
-						    Vector<Particle> particles;
-							if(!bufferOfParticles.isEmpty()){
-								try {
-									particles = bufferOfParticles.take();
-										for(int i = 0; i < n_of_particles; i++) {
-											// if particle is out of draw range does not update
-											// the position of the circle that represent it
-											if(isOnBound(particles.get(i).x(),particles.get(i).y())){
-													circles[i].setCenterX(particles.get(i).x());
-													circles[i].setCenterY(particles.get(i).y());
-													circles[i].setRadius(Math.floor(Math.sqrt(particles.get(i).mass())/5));
-											}
-										}								
-								} catch (InterruptedException e) {
-									// TODO Auto-generated catch block
-									e.printStackTrace();
+		while(true) {	
+			try {
+				Thread.sleep(1000/30);
+			} catch (InterruptedException e) {
+				
+			}
+			Platform.runLater(() -> {
+			    Vector<Particle> particles;
+				if(!bufferOfParticles.isEmpty()){
+	
+					try {
+						particles = bufferOfParticles.take();
+							for(int i = 0; i < n_of_particles; i++) {
+								// if particle is out of draw range does not update
+								// the position of the circle that represent it
+								if(isOnBound(circles[i],particles.get(i).x(),particles.get(i).y())){
+										circles[i].setCenterX(particles.get(i).x());
+										circles[i].setCenterY(particles.get(i).y());
+										//System.out.println(particles.get(i).mass());
+										circles[i].setRadius(2*Math.floor(Math.sqrt(particles.get(i).mass())));
 								}
-							}
-						});
-						
-										
+							}								
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
 				}
-    		
-    	});
-    	updateParticles.start();
-    	updateCircle.start();
-      
-    }
+			});			
+		}
+	} 
+
 	
-	public boolean isOnBound(double x,double y){
-		return (x >= -50 && x <= sizeX + 50) && (y >= -50 && y <= sizeY + 50);
+	// redraws only particles that can be seen
+	public boolean isOnBound(Circle circle,double x,double y){
+		double r = 2*circle.getRadius();
+		return (x >= -r && x <= sizeX + r) && (y >= -r && y <= sizeY + r);
 		
 	}
 		
