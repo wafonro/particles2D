@@ -18,9 +18,20 @@ public class ManagerSimulation implements Runnable{
 	@Override
 	public void run() {
 		int n_of_threads = Math.min(4,n_of_particles); // There are at most as many threads as particles		
+		int max_size_of_buffer = 120;
 		double max_position = 300; 
 		double delta = 0.001; // interval of time
 		Random randomGenerator = new Random();
+		
+		// bounds the size of the buffer
+		while(bufferParticles.size() > max_size_of_buffer){
+			try {
+				Thread.sleep(1000/30);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		
 		// Generates randomly the particles
 		Vector<Particle> particles = new Vector<Particle>();

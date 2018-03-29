@@ -57,7 +57,7 @@ public class Main extends Application {
 		grid.getChildren().add(withBorder);
 
 	    //Defining the Submit button
-	    Button submit = new Button("Submit");
+	    Button submit = new Button("Start");
 	    GridPane.setConstraints(submit, 1, 0);
 	    grid.getChildren().add(submit);
 
@@ -75,7 +75,7 @@ public class Main extends Application {
 	    
 	    
     	Scene scene = new Scene(grid, sizeX, sizeY);
-        stage.setTitle("Circle");
+        stage.setTitle("Settings");
         stage.setScene(scene);
         stage.show();
         
@@ -109,7 +109,7 @@ public class Main extends Application {
 		    updateParticles.start();
 	    	managerUI.start();
 	    	Scene scene2 = new Scene(canvas, sizeX, sizeY);
-	        stage.setTitle("Circle");
+	        stage.setTitle("Particles 2D");
 	        stage.setScene(scene2);
 	        stage.show();
 	    });
